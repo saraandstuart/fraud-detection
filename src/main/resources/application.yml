@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: fraud_detection
+
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: ${GROUP_ID:transactions-consumer-group}
+      auto-offset-reset: ${AUTO_OFFSET_RESET:earliest}
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring:
+          json:
+            trusted:
+              packages: '*'
+
+app:
+  topic-name: ${TOPIC_NAME:transactions-topic}
+
+server:
+  port: ${SERVER_PORT:8089}
