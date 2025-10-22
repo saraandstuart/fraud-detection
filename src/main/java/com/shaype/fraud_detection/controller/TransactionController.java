@@ -1,5 +1,7 @@
-package com.shaype.fraud_detection;
+package com.shaype.fraud_detection.controller;
 
+import com.shaype.fraud_detection.model.Transaction;
+import com.shaype.fraud_detection.service.TransactionProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -3,6 +3,7 @@ package com.shaype.fraud_detection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.time.Clock;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +30,11 @@ public class FraudDetectionApplication {
         return new ObjectMapper()
             .registerModule(new JavaTimeModule())
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
+
+    @Bean
+    public Clock clock() {
+        return Clock.systemUTC();
     }
 
 }

@@ -37,16 +37,36 @@ services:
     depends_on:
       - kafka
 
+  db:
+    image: postgres:14.4-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: fraud
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    healthcheck:
+      test: pg_isready -U postgres
+      interval: 1s
+      timeout: 5s
+      retries: 50
+
   producer-consumer:
     build: .
     container_name: producer-consumer
     ports:
       - "8089:8089"
+      - "5005:5005"
     environment:
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       SERVER_PORT: 8089
       TOPIC_NAME: transactions-topic
       GROUP_ID: transactions-consumer-group
       AUTO_OFFSET_RESET: earliest
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      DB_URL: jdbc:postgresql://db:5432/fraud
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
     depends_on:
       - kafka
+      - db

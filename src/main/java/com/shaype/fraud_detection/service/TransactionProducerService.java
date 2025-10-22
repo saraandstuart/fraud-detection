@@ -1,5 +1,6 @@
-package com.shaype.fraud_detection;
+package com.shaype.fraud_detection.service;
 
+import com.shaype.fraud_detection.model.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +20,7 @@ public class TransactionProducerService {
     public void publishMessage(Transaction transaction) {
         log.info("Publishing message: {}", transaction);
 
-        var future = kafkaTemplate.send(topicName, transaction.accountId(), transaction);
+        var future = kafkaTemplate.send(topicName, transaction.getAccountId(), transaction);
 
         future.whenComplete((result, ex) -> {
             if (ex == null) {
