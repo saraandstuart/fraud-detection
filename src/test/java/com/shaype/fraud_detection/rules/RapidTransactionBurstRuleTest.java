@@ -15,6 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RapidTransactionBurstRuleTest {
 
+    private static final Double LATITUDE = 54.597286;
+    private static final Double LONGITUDE = -5.930120;
+
     @Test
     public void shouldReturnFraudAlert_WhenMoreThanFiveTransactionsPerMinute() {
         // given
@@ -28,13 +31,13 @@ public class RapidTransactionBurstRuleTest {
             Double amount = 100.0 + i;
             LocalDateTime timestamp = LocalDateTime.now(fixedClock).plusSeconds(i);
 
-            Transaction transaction = new Transaction(transactionId, "accountId", amount, timestamp);
+            Transaction transaction = new Transaction(transactionId, "accountId", amount, LATITUDE, LONGITUDE, timestamp);
             recentTransactions.add(transaction);
         }
 
         TransactionContext context = new TransactionContext(recentTransactions);
 
-        Transaction transaction = new Transaction("6", "accountId", 106.0, LocalDateTime.now(fixedClock).plusSeconds(6));
+        Transaction transaction = new Transaction("6", "accountId", 106.0, LATITUDE, LONGITUDE, LocalDateTime.now(fixedClock).plusSeconds(6));
 
         FraudRule sut = new RapidTransactionBurstRule(fixedClock);
 

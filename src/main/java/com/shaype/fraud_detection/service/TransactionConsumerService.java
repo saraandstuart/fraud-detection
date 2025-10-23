@@ -21,7 +21,7 @@ public class TransactionConsumerService {
     private final TransactionRepository transactionRepo;
     private final FraudAlertRepository fraudAlertRepo;
 
-    @KafkaListener(topics = "${app.topic-name}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${app.topic-name}", groupId = "${spring.kafka.consumer.group-id}", concurrency = "3")
     @Transactional
     public void consume(Transaction transaction) {
         log.info("Consuming message: {}", transaction);

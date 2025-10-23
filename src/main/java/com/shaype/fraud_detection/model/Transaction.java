@@ -28,6 +28,12 @@ public class Transaction {
     @Column(name = "amount")
     private Double amount;
 
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
+
     @Column(name = "timestamp")
     private LocalDateTime timeStamp;
 
@@ -39,11 +45,15 @@ public class Transaction {
         String transactionId,
         String accountId,
         Double amount,
+        Double latitude,
+        Double longitude,
         LocalDateTime timeStamp
     ) {
         this.transactionId = transactionId;
         this.accountId = accountId;
         this.amount = amount;
+        this.latitude = latitude;
+        this.longitude = longitude;
         this.timeStamp = timeStamp;
     }
 }

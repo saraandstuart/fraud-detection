@@ -13,13 +13,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class LargeTransactionRuleTest {
 
+    private static final Double LATITUDE = 54.597286;
+    private static final Double LONGITUDE = -5.930120;
+
     @Test
     public void shouldReturnFraudAlert_WhenTransactionIsLargerThanThreshold() {
         // given
         Instant fixedInstant = LocalDate.of(2025, 10, 22).atStartOfDay(ZoneOffset.UTC).toInstant();
         Clock fixedClock = Clock.fixed(fixedInstant, ZoneOffset.UTC);
 
-        Transaction transaction = new Transaction("1", "1", 10001.0, LocalDateTime.now(fixedClock));
+        Transaction transaction = new Transaction("1", "1", 10001.0, LATITUDE, LONGITUDE, LocalDateTime.now(fixedClock));
 
         FraudRule sut = new LargeTransactionRule(fixedClock);
 
