@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class LargeTransactionRuleTest {
 
     @Test
-    public void shouldReturnFraudAlertWhenTransationIsLargerThanThreshold() {
+    public void shouldReturnFraudAlert_WhenTransactionIsLargerThanThreshold() {
         // given
         Instant fixedInstant = LocalDate.of(2025, 10, 22).atStartOfDay(ZoneOffset.UTC).toInstant();
         Clock fixedClock = Clock.fixed(fixedInstant, ZoneOffset.UTC);

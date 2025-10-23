@@ -6,11 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.shaype.fraud_detection.model.Transaction;
 import io.restassured.RestAssured;
-import java.time.Clock;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -29,15 +25,30 @@ public class AppIT {
 
     @Test
     public void loadTransactions() throws JsonProcessingException {
-        Instant fixedInstant = LocalDate.of(2025, 10, 22).atStartOfDay(ZoneOffset.UTC).toInstant();
-        Clock fixedClock = Clock.fixed(fixedInstant, ZoneOffset.UTC);
+        // trigger large transaction rule
+        for (int i = 0; i < 3; i++) {
+            String transactionId = "LargeTransactionRuleTest" + i;
+            String accountId = "LargeTransactionRuleTest" + i;
+            Double amount = 9999.0 + i;
+            LocalDateTime timestamp = LocalDateTime.now().plusMinutes(i);
 
-        for (int i = 0; i < 10; i++) {
+            Transaction transaction = new Transaction(transactionId, accountId, amount, timestamp);
+            String bodyJson = objectMapper.writeValueAsString(transaction);
 
-            String transactionId = String.valueOf(i + 1);
-            String accountId = String.valueOf(i + 1);
-            Double amount = 9995.0 + i;
-            LocalDateTime timestamp = LocalDateTime.now(fixedClock).plusMinutes(i);
+            given()
+                .contentType("application/json")
+                .body(bodyJson)
+                .when()
+                .post("/v1/transactions")
+                .then().statusCode(201);
+        }
+
+        // trigger rapid burst transaction rule
+        for (int i = 0; i < 5; i++) {
+            String transactionId = "RapidTransactionBurstRuleTest" + (i + 1);
+            String accountId = "accountId";
+            Double amount = 100.0 + i;
+            LocalDateTime timestamp = LocalDateTime.now().plusSeconds(i);
 
             Transaction transaction = new Transaction(transactionId, accountId, amount, timestamp);
             String bodyJson = objectMapper.writeValueAsString(transaction);
