@@ -21,7 +21,7 @@ docker compose down
 ## How To 
 ##### Publish a transaction message to Kafka via an HTTP endpoint e.g. using curl
 ```shell
-curl 'http://localhost:8089/v1/transactions' -H 'Content-Type: application/json' --data '{"timeStamp": "2025-10-21T09:30:20.033226"","transactionId": "1","accountId": "1","amount": 100}'
+curl 'http://localhost:8089/v1/transactions' -H 'Content-Type: application/json' --data '{"timeStamp": "2025-10-21T09:30:20.033226","transactionId": "1","accountId": "1","latitude": 54.597286,"longitude": -5.930120,"amount": 100}'
 ```
 ##### Read fraud-alert messages via HTTP endpoint
 ```shell
