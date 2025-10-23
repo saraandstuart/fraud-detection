@@ -18,7 +18,7 @@ public class TransactionController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@RequestBody Transaction transaction) {
+    public void createTransaction(@RequestBody Transaction transaction) {
         transactionProducerService.publishMessage(transaction);
     }
 }
