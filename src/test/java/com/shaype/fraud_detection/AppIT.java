@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
@@ -28,20 +27,27 @@ public class AppIT {
         RestAssured.baseURI = "http://localhost:8089";
     }
 
-    @Disabled
     @Test
     public void loadTransactions() throws JsonProcessingException {
         Instant fixedInstant = LocalDate.of(2025, 10, 22).atStartOfDay(ZoneOffset.UTC).toInstant();
         Clock fixedClock = Clock.fixed(fixedInstant, ZoneOffset.UTC);
 
-        Transaction transaction = new Transaction("2", "2", 10001.0, LocalDateTime.now(fixedClock));
-        String bodyJson = objectMapper.writeValueAsString(transaction);
+        for (int i = 0; i < 10; i++) {
 
-        given()
-            .contentType("application/json")
-            .body(bodyJson)
-            .when()
-            .post("/v1/transactions")
-            .then().statusCode(201);
+            String transactionId = String.valueOf(i + 1);
+            String accountId = String.valueOf(i + 1);
+            Double amount = 9995.0 + i;
+            LocalDateTime timestamp = LocalDateTime.now(fixedClock).plusMinutes(i);
+
+            Transaction transaction = new Transaction(transactionId, accountId, amount, timestamp);
+            String bodyJson = objectMapper.writeValueAsString(transaction);
+
+            given()
+                .contentType("application/json")
+                .body(bodyJson)
+                .when()
+                .post("/v1/transactions")
+                .then().statusCode(201);
+        }
     }
 }

@@ -2,7 +2,7 @@
 
 ## Build, run and stop the app
 ```shell
-# Build app
+# Build app (also runs unit tests)
 mvn clean install
 
 # Build containers
@@ -10,6 +10,9 @@ docker compose build
 
 # Run containers
 docker compose up -d --wait
+
+# Run integration tests
+mvn verify -P integration-test
 
 # stop containers
 docker compose down
